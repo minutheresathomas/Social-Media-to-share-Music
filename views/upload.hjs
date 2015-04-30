@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Upload favorite mp3 album or audio of different genres</title>
+    <meta name="description" content="Logged in users can upload the artist name, description of the mp3 file, genre of the music, image for the audio file, and the file. responsive web app" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+    <script src="/static/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/js/bootstrap.js"></script>
+    <!-- App -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+    <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+    <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+    <script type="text/javascript" src="/static/js/custom/music4u_custom1.1.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="/static/js/ie/html5shiv.js"></script>
+      <script src="/static/js/ie/respond.min.js"></script>
+      <script src="/static/js/ie/excanvas.js"></script>
+    <![endif]-->
+</head>
+<body class="">
+    <section class="vbox">
+        <header class="bg-black header header-md navbar navbar-fixed-top-xs">
+            <div class="navbar-header aside bg-success nav-xs">
+                <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+                    <i class="icon-list"></i>
+                </a>
+                <a href="/wall/{{sessionId}}" class="navbar-brand text-lt">
+                    <i class="icon-earphones"></i>
+                    <img src="/static/images/logo.png" alt="." class="hide">
+                    <span class="hidden-nav-xs m-l-sm">Musick4U</span>
+                </a>
+                <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+                    <i class="icon-settings"></i>
+                </a>
+            </div>
+            <ul class="nav navbar-nav hidden-xs">
+                <li>
+                    <a href="#nav,.navbar-header" data-toggle="class:nav-xs,nav-xs" class="text-muted">
+                        <i class="fa fa-indent text"></i>
+                        <i class="fa fa-dedent text-active"></i>
+                    </a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+                        </span>
+                        <input type="text" class="form-control input-sm no-border rounded" placeholder="Search songs, albums...">
+                    </div>
+                </div>
+            </form>
+            <div class="navbar-right ">
+                <ul class="nav navbar-nav m-n hidden-xs nav-user user">
+                    <li>
+                        <a href="/wall/{{sessionId}}/upload">
+                            <i class="fa fa-cloud-upload text"></i>
+                            <span class="text">Upload</span>
+                        </a>
+                    </li>
+                    <li class="hidden-xs">
+                        <a href="#" class="dropdown-toggle lt" data-toggle="dropdown">
+                            <i class="icon-bell"></i>
+                            <span class="badge badge-sm up bg-danger count">2</span>
+                        </a>
+                        <section class="dropdown-menu aside-xl animated fadeInUp">
+                            <section class="panel bg-white">
+                                <div class="panel-heading b-light bg-light">
+                                    <strong>You have <span class="count">2</span> notifications</strong>
+                                </div>
+                                <div class="list-group list-group-alt">
+                                    <a href="#" class="media list-group-item">
+                                        <span class="pull-left thumb-sm">
+                                            <img src="/static/images/a0.png" alt="..." class="img-circle">
+                                        </span>
+                                        <span class="media-body block m-b-none">
+                                            Use awesome animate.css<br>
+                                            <small class="text-muted">10 minutes ago</small>
+                                        </span>
+                                    </a>
+                                    <a href="#" class="media list-group-item">
+                                        <span class="media-body block m-b-none">
+                                            1.0 initial released<br>
+                                            <small class="text-muted">1 hour ago</small>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="panel-footer text-sm">
+                                    <a href="#" class="pull-right"><i class="fa fa-cog"></i></a>
+                                    <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
+                                </div>
+                            </section>
+                        </section>
+                    </li>
+                    <li>
+
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle bg clear" data-toggle="dropdown">
+                            <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                                <img src="/static/images/a0.png" alt="...">
+                            </span>
+                            John.Smith <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight">
+                            <li>
+                                <span class="arrow top"></span>
+                                <a href="#">Settings</a>
+                            </li>
+                            <li>
+                                <a href="profile.html">Profile</a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="badge bg-danger pull-right">3</span>
+                                    Notifications
+                                </a>
+                            </li>
+                            <li>
+                                <a href="docs.html">Help</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section>
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-black dk nav-xs aside hidden-print" id="nav">
+                    <section class="vbox">
+                        <section class="w-f-md scrollable">
+                            <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railopacity="0.2">
+                                <!-- nav -->
+                                <nav class="nav-primary hidden-xs">
+                                    <ul class="nav bg clearfix">
+                                        <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                                            Discover
+                                        </li>
+                                        <li>
+                                            <a href="/wall/{{sessionId}}">
+                                                <i class="icon-disc icon text-success"></i>
+                                                <span class="font-bold">What's new</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="icon-music-tone-alt icon text-info"></i>
+                                                <span class="font-bold">Genres</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/wall/{{sessionId}}/upload">
+                                                <i class="fa fa-cloud-upload icon text-primary-lter"></i>
+                                                <span class="font-bold">Upload</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="icon-list icon  text-info-dker"></i>
+                                                <span class="font-bold">Listen</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-target="#content" data-el="#bjax-el" data-replace="true">
+                                                <i class="icon-social-youtube icon  text-primary"></i>
+                                                <span class="font-bold">Video</span>
+                                            </a>
+                                        </li>
+                                        <li class="m-b hidden-nav-xs"></li>
+                                    </ul>
+                                </nav>
+                                <!-- / nav -->
+                            </div>
+                        </section>
+
+                        <footer class="footer hidden-xs no-padder text-center-nav-xs">
+                            <div class="bg hidden-xs ">
+                                <div class="dropdown dropup wrapper-sm clearfix">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="thumb-sm avatar pull-left m-l-xs">
+                                            <img src="/static/images/a3.png" class="dker" alt="...">
+                                            <i class="on b-black"></i>
+                                        </span>
+                                        <span class="hidden-nav-xs clear">
+                                            <span class="block m-l">
+                                                <strong class="font-bold text-lt">John.Smith</strong>
+                                                <b class="caret"></b>
+                                            </span>
+                                            <span class="text-muted text-xs block m-l">Art Director</span>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu animated fadeInRight aside text-left">
+                                        <li>
+                                            <span class="arrow bottom hidden-nav-xs"></span>
+                                            <a href="#">Settings</a>
+                                        </li>
+                                        <li>
+                                            <a href="profile.html">Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <span class="badge bg-danger pull-right">3</span>
+                                                Notifications
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="docs.html">Help</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </footer>
+                    </section>
+                </aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="hbox stretch">
+                        <section>
+                            <section class="vbox">
+                                <section class="scrollable padder-lg w-f-md" id="bjax-target">
+                                    <h2 class="font-thin m-b">
+                                        Upload MusiK <i class="fa fa-cloud-upload text"></i>
+                                    </h2>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <section class="panel panel-default">
+                                                <!--<header class="panel-heading font-bold">Horizontal form</header>-->
+                                                <div class="panel-body">
+                                                    <form class="form-horizontal" id="uploadForm" enctype="multipart/form-data" action="/wall/{{sessionId}}/audio" method="POST">
+                                                        <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Title</label>
+                                                            <div class="col-lg-10">
+                                                                <input type="text" name="title" id="title" class="form-control" required placeholder="Title...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Artist</label>
+                                                            <div class="col-lg-10">
+                                                                <input type="text" id="artist" name="artist" class="form-control" required placeholder="Artist...">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Genre</label>
+                                                            <div class="col-lg-10">
+                                                                <select name="genre" id="genre" class="form-control m-b" required>
+                                                                    <option value="0">--Select Genre--</option>
+                                                                    <option value="1">acoustic</option>
+                                                                    <option value="2">ambient</option>
+                                                                    <option value="3">blues</option>
+                                                                    <option value="4">classical</option>
+                                                                    <option value="5">country</option>
+                                                                    <option value="6">electronic</option>
+                                                                    <option value="7">emo</option>
+                                                                    <option value="8">folk</option>
+                                                                    <option value="9">hardcore</option>
+                                                                    <option value="10">hip hop</option>
+                                                                    <option value="11">indie</option>
+                                                                    <option value="12">jazz</option>
+                                                                    <option value="13">latin</option>
+                                                                    <option value="14">metal</option>
+                                                                    <option value="15">pop</option>
+                                                                    <option value="16">pop punk</option>
+                                                                    <option value="17">punk</option>
+                                                                    <option value="18">reggae</option>
+                                                                    <option value="19">rnb</option>
+                                                                    <option value="20">rock</option>
+                                                                    <option value="21">soul</option>
+                                                                    <option value="22">world</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                         <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Description</label>
+                                                            <div class="col-lg-10">
+                                                                <textarea type="text" id="description" name="description" rows="4" cols="50" class="form-control" placeholder="Description..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Select Art</label>
+                                                            <div class="col-lg-10">
+                                                                <input type="file" name="albumArt" id="albumArt" accept="image/*" class="btn btn-default">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-lg-2 control-label">Select File</label>
+                                                            <div class="col-lg-10">
+                                                                <input type="file" name="audioFile" id="audioFile" accept="audio/*" class="btn btn-default" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<a href="#" class="btn btn-dark" data-dismiss="modal">Close</a>-->
+                                                            <div class="col-lg-offset-2 col-lg-10">
+                                                                <button onClick="upload_file()" id="uploadBtn" class="btn btn-success" data-toggle="class:show inline" data-target="#spin" data-loading-text="Uploading..."><i class="fa fa-cloud-upload text"></i> Upload</button> <i class="fa fa-spin fa-spinner hide" id="spin"></i>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        
+                                    </div>
+                                </section>
+                                <br>
+                                <br>
+                            </section>
+                        </section>
+
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+                </section>
+            </section>
+        </section>
+    </section>
+<div class="modal fade" id="uploadMsg">
+<div class="modal-dialog" id="uploadModal">
+    <div class="modal-content">
+        <div class="modal-body">
+           <h4>File Successfully Uploaded!</h4>
+            </div>
+            <div class="modal-footer">
+      <a href="/wall/{{sessionId}}/upload"  class="btn btn-success">Close</a>
+    </div>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div>
+</body>
+</html>
+
+<script>
+  //$(document).ready(function() {
+
+       
+//});
+</script>

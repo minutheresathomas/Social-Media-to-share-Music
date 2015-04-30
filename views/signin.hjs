@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>  
+  <meta charset="utf-8" />
+  <title>Welcome to Musik4u. Sign in to Enjoy and Discover Music</title>
+  <meta name="description" content="Login to Musik4U to share audios, explore and enjoy new trending music" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />  
+    <!--[if lt IE 9]>
+    <script src="js/ie/html5shiv.js"></script>
+    <script src="js/ie/respond.min.js"></script>
+    <script src="js/ie/excanvas.js"></script>
+  <![endif]-->
+</head>
+<body class="bg-info dker">
+  <section id="content" class="m-t-lg wrapper-md animated fadeInUp">    
+    <div class="container aside-xl">
+      <a class="navbar-brand block" href="/"><span class="h1 font-bold">Musik4U</span></a>
+      <section class="m-b-lg">
+        <header class="wrapper text-center">
+          <strong>Sign in to get in touch</strong>
+        </header>
+                                <div class="form-group">
+                                    <input type="email" id="email" name="email" placeholder="Email" class="form-control rounded input-lg text-center no-border" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" id="password" name="password" placeholder="Password" class="form-control rounded input-lg text-center no-border" required>
+                                </div>
+                                <button id="login" type="button" class="btn btn-lg btn-warning lt b-white b-2x btn-block btn-rounded" onclick="login_user()"><i class="icon-arrow-right pull-right"></i><span class="m-r-n-lg">Sign in</span></button>
+                                <div class="text-center m-t m-b"><a href="#"><small>Forgot password?</small></a></div>
+                                <div class="line line-dashed"></div>
+                                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                                <a href="/signup" class="btn btn-lg btn-info btn-block rounded" data-dismiss="modal">Click Sign up to Create an account</a>
+      </section>
+    </div>
+  </section>
+  <!-- footer -->
+  <footer id="footer">
+    <div class="text-center padder">
+      <p>
+        <small><br>&copy; 2015</small>
+      </p>
+    </div>
+  </footer>
+  <!-- / footer -->
+  <script src="/static/js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>  
+  <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+  <script type="text/javascript" src="/static/js/custom/music4u_custom1.1.js"></script>
+</body>
+</html>
+<script>
+// function login_user(){
+// 	var email = $("#email").val();
+// 	var password = $("#password").val();
+// 	if(email !='' && password !=''){
+// 		Music4u.user.login();
+// 	}
+// }
+</script>
