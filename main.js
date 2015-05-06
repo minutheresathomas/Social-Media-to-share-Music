@@ -21,7 +21,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var wall = require('./routes/wall');
 
-var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+//var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+var client = redis.createClient(6379, "localhost");
 var app = express();
 
 //view engine setup
@@ -40,7 +41,8 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/public'));
 app.use('/static', express.static(__dirname + '/public'));
 app.use(session({
-	store: new redisStore({ host: 'music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com', port: 6379, client: client }),
+	//store: new redisStore({ host: 'music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com', port: 6379, client: client }),
+	store: new redisStore({ host: 'localhost', port: 6379, client: client }),
 	secret: 'musicforu',
 	saveUninitialized: true, // don't create session until something stored,
 	resave: true // don't save session if unmodified

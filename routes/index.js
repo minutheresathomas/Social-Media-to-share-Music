@@ -6,7 +6,8 @@ var crypto = require('crypto');
 var redis = require('redis');
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
-var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+//var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+var client = redis.createClient(6379, "localhost");
 var multer = require('multer');
 var Localize = require('localize');
 var done = false;
@@ -17,22 +18,22 @@ moment().tz("America/Los_Angeles").format();
 
 
 var myLocalize = new Localize({
-    "Explore": {
-        "es": "Pruebas...",
-        "sr": "тестирање..."
-    },
-		"Sign in": {
-        "es": "jsckjcnk",
-        "sr": "fdfdgv"
-    },
-		"Sign up": {
-        "es": "dksdkbcnk",
-        "sr": "okoko"
-    },
-    "Substitution: $[1]": {
-        "es": "Sustitución: $[1]",
-        "sr": "замена: $[1]"
-    }
+	"Explore": {
+		"es": "Pruebas...",
+		"sr": "тестирање..."
+	},
+	"Sign in": {
+		"es": "jsckjcnk",
+		"sr": "fdfdgv"
+	},
+	"Sign up": {
+		"es": "dksdkbcnk",
+		"sr": "okoko"
+	},
+	"Substitution: $[1]": {
+		"es": "Sustitución: $[1]",
+		"sr": "замена: $[1]"
+	}
 });
 
 /* GET home page. */
@@ -40,9 +41,9 @@ router.get('/', function(req, res) {
 //	myLocalize.setLocale("es");
 
 	var lang = {
-		"explore":myLocalize.translate("Explore"),
-		"Sign_up":myLocalize.translate("Sign up"),
-		"Sign_in":myLocalize.translate("Sign in"),
+			"explore":myLocalize.translate("Explore"),
+			"Sign_up":myLocalize.translate("Sign up"),
+			"Sign_in":myLocalize.translate("Sign in"),
 	};
 	//console.log(myLocalize.translate("Testing..."));
 	res.render('index',lang);
@@ -80,33 +81,33 @@ router.get('/wall/:sessionId/getAudio',function(req,res){
 		}
 	},sessionId);
 });
-// router.get('/wall/:sessionId/user',function(req,res){
-// 	var sessionId = req.params.sessionId;
-// 	console.log("userid: " + sessionId);
-// 	mysql.getMyProfile(function(err,results){
-// 		if(err){
-// 			throw err;
-// 			console.log(err);
-// 		}else{
-// 			if(results.length == 0)
-// 			{
-// 				var msg = "Not able to get data";
-// 				res.status(200).send({
-// 					Error : msg,
-// 					sessionId : req.params.sessionId,
-// 					no_audio:true
-// 					});
-// 			}
-// 			else
-// 			{
-//
-// 				res.status(200).send({
-// 					user:results
-// 					});
-// 			}
-// 		}
-// 	},sessionId);
-// });
+//router.get('/wall/:sessionId/user',function(req,res){
+//var sessionId = req.params.sessionId;
+//console.log("userid: " + sessionId);
+//mysql.getMyProfile(function(err,results){
+//if(err){
+//throw err;
+//console.log(err);
+//}else{
+//if(results.length == 0)
+//{
+//var msg = "Not able to get data";
+//res.status(200).send({
+//Error : msg,
+//sessionId : req.params.sessionId,
+//no_audio:true
+//});
+//}
+//else
+//{
+
+//res.status(200).send({
+//user:results
+//});
+//}
+//}
+//},sessionId);
+//});
 
 router.get('/wall/:sessionId', function(req, res) {
 	var sessionId = req.params.sessionId;
@@ -123,7 +124,7 @@ router.get('/wall/:sessionId', function(req, res) {
 					Error : msg,
 					sessionId : req.params.sessionId,
 					no_audio:true
-					});
+				});
 			}
 			else
 			{
@@ -133,7 +134,7 @@ router.get('/wall/:sessionId', function(req, res) {
 					audio:results,
 					no_audio:false,
 					sessionId:req.params.sessionId
-					});
+				});
 			}
 		}
 	},sessionId);
@@ -156,7 +157,7 @@ router.get('/wall/:sessionId/audio/:audioId',function(req,res){
 					Error : msg,
 					sessionId : req.params.sessionId,
 					no_audio:true
-					});
+				});
 			}
 			else
 			{
@@ -165,7 +166,7 @@ router.get('/wall/:sessionId/audio/:audioId',function(req,res){
 					audio:results,
 					no_audio:false,
 					sessionId:req.params.sessionId
-					});
+				});
 			}
 		}
 	},audioId);
@@ -182,8 +183,12 @@ router.get('/search', function(req, res) {
 		}else{
 			if(results.length == 0)
 			{
-				var msg = "Not able to retrieve the audio.";
-				res.end(err, msg);
+				var msg = "Not able to get data";
+				res.status(200).render('search',{
+					Error : msg,
+					sessionId : req.params.sessionId,
+					no_audio:true
+				});
 			}
 			else
 			{
@@ -195,6 +200,76 @@ router.get('/search', function(req, res) {
 			}
 		}
 	}, keyword);
+});
+
+//search for a user with a keyword
+router.get('/wall/:sessionId/profile/search', function(req, res) {
+	var keyword = req.query.keyword;
+	var myUserId = req.params.sessionId;
+	mysql.getSearchedUsers(function(err,results){
+		if(err){
+			console.log("ERROR:"+err);
+			console.log("ERROR Message:"+err.message);
+			throw err;
+
+		}else{
+			if(results.message != "success")
+			{
+				var msg = "Not able to get data";
+				res.status(200).render('searchUserResults',{
+					Error : msg,
+					sessionId : myUserId,
+					no_users:true
+				});
+			}
+			else
+			{
+				console.log(results);
+				//return results;
+				var data = {
+						sessionId : myUserId,
+						userDetails : results
+				}
+				console.log("profile data - " + results);
+				res.status(200).render('searchUserResults',results);
+			}
+		}
+	}, keyword, myUserId);
+});
+
+//search for a user with a keyword
+router.get('/wall/:sessionId/profile/search/:profileId', function(req, res) {
+	var myUserId = req.params.sessionId;
+	var profileId = req.params.profileId;
+	mysql.searchedUserDetails(function(err,results){
+		if(err){
+			console.log("ERROR:"+err);
+			console.log("ERROR Message:"+err.message);
+			throw err;
+
+		}else{
+			if(results.length == 0)
+			{
+				var msg = "Not able to get data";
+				res.status(200).render('profileSearch',{
+					Error : msg,
+					sessionId : myUserId,
+					no_users:true
+				});
+			}
+			else
+			{
+				console.log(results);
+				//return results;
+				var data = {
+						sessionId : myUserId,
+						userDetails : results
+				}
+				console.log("profile data - " + results);
+				res.render('profileSearch',results);
+			}
+		}
+	}, myUserId, profileId);
 });
 
 router.get('/wall/:sessionId/upload', function(req, res) {
@@ -215,7 +290,7 @@ function generate_sessionId(callback) {
 	var current_date = (new Date()).valueOf().toString();
 	var random = Math.random().toString();
 	callback(crypto.createHash('sha1').update(current_date + random).digest(
-			'hex'));
+	'hex'));
 }
 
 router.get("/wall/:sessionId/user",function(req,res){
@@ -238,7 +313,7 @@ router.get("/wall/:sessionId/user",function(req,res){
 					sessionId:userId
 				});
 				res.send();
-			//	console.log(results);
+				//	console.log(results);
 				// res.render('profile',{
 				// 	userDetails : results,
 				// 	sessionId:userId
@@ -264,8 +339,8 @@ router.get("/wall/:sessionId/profile/:profileId",function(req,res){
 				console.log(results);
 				//return results;
 				var data = {
-					sessionId : userId,
-					userDetails : results
+						sessionId : userId,
+						userDetails : results
 				}
 				//console.log("data in json format " + JSON.stringify(data));
 				console.log("profile data - " + results);
@@ -275,8 +350,6 @@ router.get("/wall/:sessionId/profile/:profileId",function(req,res){
 		}
 	},userId,profileId);
 	//console.log("Details:"+details);
-
-
 });
 
 router.post("/wall/:sessionId/profile/:profileId",multer({
@@ -302,10 +375,10 @@ router.post("/wall/:sessionId/profile/:profileId",multer({
 		picture = req.body.picPath;
 	}
 	var data = {
-		userId:userId,
-		firstname : req.body.firstname,
-		lastname: req.body.lastname,
-		picture: picture
+			userId:userId,
+			firstname : req.body.firstname,
+			lastname: req.body.lastname,
+			picture: picture
 	}
 	mysql.updateProfile(data);
 	res.status(200).send("profile updated");
@@ -406,7 +479,7 @@ router.post('/register', function(req, res) {
 			}
 		}
 	}, req.param('firstname'), req.param('lastname'), req.param('email'), req
-			.param('password'));
+	.param('password'));
 });
 
 router.post('/login', function(req, res) {

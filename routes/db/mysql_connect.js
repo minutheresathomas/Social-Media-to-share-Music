@@ -1,7 +1,9 @@
 var mysql = require('mysql');
 var async = require('async');
 var redis = require('redis');
-var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+var underscore = require('underscore');
+//var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+var client = redis.createClient(6379, "localhost");
 var pool = mysql.createPool({
 	host     : 'cmpe280.cpqctarrvuuh.us-west-1.rds.amazonaws.com',
 	user     : 'root',
@@ -9,18 +11,6 @@ var pool = mysql.createPool({
 	port: '3306',
 	database: 'musik4u'
 });
-//var pool = mysql.createPool({
-//	host     : 'localhost',
-//	user     : 'root',
-//	password : '',
-//	port: '3306',
-//	database: 'musik4u-test'
-//});
-
-/*var elasticClient = new elasticsearch.Client({
-	host: 'localhost:9200',
-	log: 'trace'
-});*/
 
 function insertUser(callback,firstname,lastname,email,confirm_password){
 	var pic = "/static/images/defaultavatar.png"
@@ -223,47 +213,62 @@ function insertAudio(data){
 			else {
 				var audioId = results.insertId;
 				// ES insert
-				var numLikes =0;
-				elasticClient.create({
-					index: 'music4u',
-					type: 'musictype',
-					id: audioId,
-					body: {
-						artist: data.artist,
-						title: data.title,
-						genre: data.genre,
-						description: data.description,
-						albumart: data.albumArt,
-						audioFile: data.audioFile,
-						userId: data.userId,
-						num_likes: numLikes,
-						createdAt: data.created						
-					}
-				}, function (err, results){
-					if(err)
-						throw err;
-					else
-					{
-						console.log(results);
-					}
-				}); // inserted into elastic search
-				var getsql = "select * from audio where audio_id= ?";
-				connection.query( getsql,[audioId],  function(err, audios){
-					if(err) {
-						throw err;
-					}
-					else
-					{
-						if(audios.length!=0){
-							getAllFollowers(function(err,audio){
-								console.log("got back");
-								if(err)throw err;
-								else{
+				var selectUserSql = "Select * from user where userId = ?"
+					connection.query(selectUserSql, [userId], function (err,users){
+						if (err) {
+							throw err;
+
+						}else{
+							var user = users;
+							var lastName = users[0].lastname;
+							var firstName = users[0].firstname;
+							var picture = users[0].picture;
+							var numLikes =0;
+							elasticClient.create({
+								index: 'music4u',
+								type: 'musictype',
+								id: audioId,
+								body: {
+									artist: data.artist,
+									title: data.title,
+									genre: data.genre,
+									description: data.description,
+									albumart: data.albumArt,
+									audioFile: data.audioFile,
+									userId: data.userId,
+									userLastName: lastName,
+									userFirstName: firstName,
+									picture: picture,
+									numOfLikes: numLikes,
+									createdAt: data.created						
 								}
-							},userId,audios[0]);
+							}, function (err, results){
+								if(err)
+									throw err;
+								else
+								{
+									console.log(results);
+								}
+							}); // inserted into elastic search
+							var getsql = "select * from audio where audio_id= ?";
+							connection.query( getsql,[audioId],  function(err, audios){
+								if(err) {
+									throw err;
+								}
+								else
+								{
+									if(audios.length!=0){
+										getAllFollowers(function(err,audio){
+											console.log("got back");
+											if(err)throw err;
+											else{
+											}
+										},userId,audios[0]);
+									}
+								}
+							});
 						}
-					}
-				});
+					});
 			}
 		});
 		connection.release();
@@ -343,7 +348,108 @@ function getSearchedAudios(callback, keyword){
 	});
 }
 
-exports.retrieveUserFollowers=function(callback, userId, profileId){
+function getSearchedUsers(callback, keyword, myUserId){
+	// elastic search
+	var myId = myUserId;
+	elasticClient.search({
+		index: 'music4u',
+		type: 'musictype',
+		body: {
+			query: {
+				multi_match: {
+					query: keyword,
+					fields: ["userFirstName", "userLastName"],
+				}
+			}
+		}
+	}, function (error, response) {
+		if(error)
+		{
+			throw error;
+		}
+		else {
+			if(response.hits.total == 0)
+			{
+				var msg = "No such person to follow";
+				var errorMsg = {'Message': msg};
+				callback(error, msg);
+			}
+			else {
+				var err = error;
+				var hits = response.hits;
+				var jsontotal = { 'total' : hits.total,
+						'sessionId':myId,
+						'message': "success",
+						'no_users':false};
+				var hithits = hits.hits;
+				var users = [];
+				console.log("Hits multi-match : "+JSON.stringify(hits));
+				
+				//get the users and iterate through each of them
+				async.forEach(hithits, getEachUser, afterAllTasks);
+				function getEachUser(row, callback)
+				{
+					var userDetails = row._source;
+					console.log("user Details : "+JSON.stringify(userDetails));
+					var firstName = userDetails.userFirstName;
+					var lastName = userDetails.userLastName;
+					var picture = userDetails.picture;
+					var userId = userDetails.userId;
+					
+					var userData = {
+						'firstName' : firstName,
+						'lastName' : lastName,
+						'picture' : picture,
+						'userId' :userId
+					};
+					users.push(userData);
+					callback(err);
+				};
+				function afterAllTasks(err) {
+					console.log(JSON.stringify(users));
+					var jsonUsers = underscore.extend(jsontotal, {'users' : users});
+					callback(err, jsonUsers);
+				}
+			}
+		}
+	});
+}
+
+function searchedUserDetails(callback, userId, profileId){
+	var myId = userId
+	//same as retrieve user followers
+	retrieveUserFollowers( function(err, results) {
+		if(err)
+		{
+			console.log("ERROR : "+err);
+			throw err;
+		}
+		else{
+			var profileDetails = results;
+			//get my details too
+			var selectSql="select * from audio where userId= ?";
+			pool.getConnection(function(err, connection){
+				connection.query(selectSql, [myId], function (err,myDetails){
+					if (err) {
+						console.log("ERROR: " + err.message);
+						throw err;
+					}else{
+						var json_myDet = {'my_details' : myDetails};
+						var msg = "Success";
+						var returnMessage = {'Message': msg};
+						var details = underscore.extend(profileDetails, json_myDet);
+						var complete_details = underscore.extend(details, returnMessage);
+						callback(err, complete_details);
+					}
+				});
+				connection.release();
+			});
+		}
+	}, myId, profileId);
+}
+
+//exports.retrieveUserFollowers=function(callback, userId, profileId){
+function retrieveUserFollowers(callback, userId, profileId){
 	console.log("user id - " + userId + "profile id -" + profileId);
 	var selectSql="select * from audio where userId= ?";
 	pool.getConnection(function(err, connection){
@@ -429,3 +535,6 @@ exports.getSearchedAudios = getSearchedAudios;
 exports.update_like = update_like;
 exports.getMyProfile = getMyProfile;
 exports.updateProfile = updateProfile;
+exports.getSearchedUsers = getSearchedUsers;
+exports.retrieveUserFollowers = retrieveUserFollowers;
+exports.searchedUserDetails = searchedUserDetails;

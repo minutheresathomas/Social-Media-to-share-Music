@@ -4,7 +4,8 @@
 
 var mysql =  require('mysql');
 var redis = require('redis');
-var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+//var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
+var client = redis.createClient(6379, "localhost");
 //var connection =  mysql.createConnection({
 //	host : "localhost",
 //	user :"root",
@@ -82,7 +83,7 @@ socket.on('clearUserId',function(msg){
 							type: 'musictype',
 							id: audioId,
 							body: {
-								script: 'ctx._source.num_likes += 1',
+								script: 'ctx._source.numOfLikes += 1',
 							}
 						}, function (err, results){
 							if(err)
@@ -132,7 +133,7 @@ socket.on('clearUserId',function(msg){
 							type: 'musictype',
 							id: audioId,
 							body: {
-								script: 'ctx._source.num_likes -= 1',
+								script: 'ctx._source.numOfLikes -= 1',
 							}
 						}, function (err, results){
 							if(err)
