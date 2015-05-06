@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
   <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/toastr.css" type="text/css" />
   <script src="/static/js/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="/static/js/bootstrap.js"></script>
@@ -24,6 +25,7 @@
   <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
   <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
   <script type="text/javascript" src="/static/js/custom/music4u_custom1.1.js"></script>
+  <script src="/static/js/toastr.js"></script>
     <!--[if lt IE 9]>
     <script src="js/ie/html5shiv.js"></script>
     <script src="js/ie/respond.min.js"></script>
@@ -77,11 +79,11 @@
                             <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                                 <img src="/static/images/a0.png" alt="...">
                             </span>
-                            {{firstname}}John.Smith <b class="caret"></b>
+                            {{firstname}} <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight">
                             <li>
-                                <a href="/wall/{{sessionId}}/profile">Profile</a>
+                                <a href="/wall/{{sessionId}}/profile/{{sessionId}}">Profile</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -174,67 +176,47 @@
                                             <span class="bar5 a5 bg-success dker"></span>
                                         </span>
                                     </h2>
-                                    <div class="row">
-
-
-
                                     {{#no_audio}}
                                     <p>No music found. Please upload some songs or start following your friends.</p>
                                     {{/no_audio}}
                                     {{#audio}}
-                                        <div class="col-sm-4">
-                                            <section class="panel panel-default">
+                                    <div class="col-lg-4">
+                                            <section class="panel panel-success">
+
                                                 <!--<header class="panel-heading font-bold">Horizontal form</header>-->
-                                                <div class="panel-body col-sm-11">
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <!--a href="#"><img src="/static/images/p1.jpg" alt="" style="width:50px;height:50px"></a>-->
-                                                            <span class="thumb-sm avatar m-t-n-sm m-b-n-sm m-l-sm">
-                                								<img src="{{picture}}" alt="...">
-                            								</span>
-                                                        </div>
-                                                        <div class="col-sm-8">
-                                                            <label class="col-lg-10 control-label">{{firstname}} {{lastname}}</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="padder-v row">
-                                                        <div class="col-sm-11">
-                                                        <span class="thumb-lg m-t-n-sm m-b-n-sm m-l-sm">
-                                								<img src="{{albumArt}}" alt="...">
-                            								</span>
-                                                            <!--<a href="#"><img src="{{albumArt}}" alt="" style="width:100px;height:100px"></a>-->
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                        <label class="col-lg-10 control-label"><b>{{title}}</b></label><br>
+                                                <div class="panel-body">
+                                                  <div class="col-lg-2">
+                                                      <a><img class="thumb-sm avatar " src="{{picture}}" alt="" style=""></a>
+                                                  </div>
+                                                  <div class="col-lg-10">
+                                                      <label class="control-label">{{firstname}} {{lastname}}</label>
+                                                  </div>
+                                                  <div class="col-lg-12">
+                                                    <a href="#"><img class="thumb-lg" src="{{albumArt}}" alt="" style=""></a>
+                                                  </div>
+                                                  <div class="col-lg-12">
+                                                    <label class="control-label"><b>{{title}}</b></label><br>
                                                         <small class="text-muted">{{artist}}</small>
-                                                            <audio controls>
-                                                                <source src="{{audioFile}}" type="audio/mpeg">
-                                                                Your browser does not support the audio element.
-                                                            </audio>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                        <a href="#"  class="active {{audio_id}}_like"  like-count="{{like_count}}" onclick="unlike({{audio_id}});" style="display:{{audiolike}}">
-                                                        {{like_count}}
-                                            							<i class="fa fa-heart-o text"></i>
-                                            							<i class="fa fa-heart text-active text-danger"></i>
-                                          							</a>
-                                                        <a href="#"  class=" {{audio_id}}_unlike"  like-count="{{like_count}}" onclick="like({{audio_id}}); " style="display:{{unlike}}">
-                                                        {{like_count}}
-                                            							<i class="fa fa-heart-o text"></i>
-                                            							<i class="fa fa-heart text-active text-danger"></i>
-                                          							</a>
-                                                        </div>
-                                                    </div>
+                                                  </div>
+                                                  <div class="col-lg-12">
+                                                    <audio controls>
+                                                        <source src="{{audioFile}}" type="audio/mpeg">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                  </div>
+                                                  <div class="col-lg-12">
+                                                    <a href="/wall/{{sessionId}}/audio/5" class="btn btn-default active">
+                                                      {{like_count}}
+                                		                  <!-- <i class="fa fa-heart-o text"></i> -->
+                                		                  <i class="fa fa-heart text-active text-danger"></i>
+                                		                </a>
+
+                                                  </div>
+
                                                 </div>
                                                 </section>
                                             </div>
-                                                <div class="clearfix visible-xs"></div>
-                                        {{/audio}}
-                                        </div>
+                                            {{/audio}}
                                 </section>
                             </section>
                         </section>
@@ -250,7 +232,33 @@
 </html>
 <script>
     $(document).ready(function () {
+      var socket = io.connect('http://musik4u.elasticbeanstalk.com');
+      Music4u.user.socket = socket;
 
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+
+      socket.emit('userId',{'userId':{{sessionId}}});
+
+      socket.on('newsfeeds',function(audio){
+        //console.log(audio);
+        //alert("New Audio Uploaded: " + audio.audio_id);
+        toastr["info"]("New Music Uploaded!",{onclick:function(){window.location.reload();}});
+      });
       ///alert("tt");
     /*  $("#likes").click(function(e){
         e.preventDefault();
@@ -266,5 +274,9 @@
         document.getElementById('likes').innerHTML=array[0].numberOfLikes + "<i class='fa fa-heart-o text'></i><i class='fa fa-heart text-active text-danger'></i>";
       });*/
        // Music4u.user.buildWall();
+
+    });
+    $(window).bind("onbeforeunload",function(){
+       return CONFIRM("Yo");
     });
 </script>

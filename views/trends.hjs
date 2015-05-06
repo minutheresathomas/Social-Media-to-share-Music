@@ -73,7 +73,7 @@
                     <span class="bar4 a4 bg-warning dk"></span>
                     <span class="bar5 a5 bg-danger dker"></span>
                   </span></h2>
-                  <iframe src="http://localhost:5601/#/visualize/edit/Top-genre?embed&_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),vis:(aggs:!((id:'1',params:(),schema:metric,type:count),(id:'2',params:(field:genre,order:desc,orderBy:'1',size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTooltip:!t,defaultYExtents:!f,mode:stacked,shareYAxis:!t),type:histogram))&_g=(refreshInterval:(display:'5%20seconds',section:1,value:5000),time:(from:now%2Fw,mode:quick,to:now%2Fw))" height="600" width="800"></iframe>
+                  <iframe src="http://52.8.81.235:5601/#/visualize/edit/Top-genre?embed&_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),vis:(aggs:!((id:'1',params:(),schema:metric,type:count),(id:'2',params:(field:genre,order:desc,orderBy:'1',size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTooltip:!t,defaultYExtents:!f,mode:stacked,shareYAxis:!t),type:histogram))&_g=(refreshInterval:(display:'5%20seconds',section:1,value:5000),time:(from:now%2Fw,mode:quick,to:now%2Fw))" height="600" width="800"></iframe>
                 
                 </section>
                 <footer class="footer bg-success">

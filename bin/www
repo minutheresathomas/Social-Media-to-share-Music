@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var debug = require('debug')('MusiK4U');
-var app = require('../app');
+var app = require('../main');
 var websocket=require('../routes/websockets');
 
 app.set('port', process.env.PORT || 3000);

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="app">
-<head>  
+<head>
   <meta charset="utf-8" />
   <title> Musik4U -Share Trending Music  Entertainment Information  </title>
   <meta name="description" content="Musik4U shows the most popular and trending songs and albums  uploaded by the  users . We also allow users to Sign in to share the uploaded songs through the social media." />
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
   <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
-  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />  
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
     <!--[if lt IE 9]>
     <script src="js/ie/html5shiv.js"></script>
     <script src="js/ie/respond.min.js"></script>
@@ -50,10 +50,10 @@
                       <a href="/explore">Explore</a>
                   </li>
                   <li>
-                      <a href="#signin" data-toggle="modal" class="">Sign in</a>
+                      <a href="/signin"class="">Sign in</a>
                   </li>
                   <li>
-                      <a href="#signup" data-toggle="modal" class="">Sign up</a>
+                      <a href="/signup" class="">Sign up</a>
                   </li>
               </ul>
           </div>
@@ -269,7 +269,7 @@
                                 <i class="fa fa-plus-circle"></i>
                               </a>
                             </div>
-                          </div>                          
+                          </div>
                           <a href="#"><img src="images/p6.jpg" alt="" class="r r-2x img-full"></a>
                         </div>
                         <div class="padder-v">
@@ -476,8 +476,8 @@
                       </div>
                     </div>
                   </div>
-               
-                
+
+
                 </section>
                 <footer class="footer bg-success">
                   <div id="jp_container_N">
@@ -549,12 +549,12 @@
                 </footer>
               </section>
             </section>
-           
+
           </section>
           <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
         </section>
       </section>
-    </section>    
+    </section>
   </section>
   <div class="modal fade" id="signup">
 <div class="modal-dialog">
@@ -664,7 +664,7 @@
   <script src="/static/js/bootstrap.js"></script>
   <!-- App -->
     <script src="/static/js/jPlayer/demo.js"></script>
-  <script src="/static/js/app.js"></script>  
+  <script src="/static/js/app.js"></script>
   <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="/static/js/app.plugin.js"></script>
   <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>

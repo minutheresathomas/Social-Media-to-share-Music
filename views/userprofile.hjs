@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+  <meta charset="utf-8" />
+  <title>Musik4U - Profile for the user to personalize the account</title>
+  <meta name="description" content="Customize the account. Provide personal data like profile picture, country, phone." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="/static/js/jPlayer/jplayer.flat.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/font.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+  <script src="/static/js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/app.plugin.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/jquery.jplayer.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/add-on/jplayer.playlist.min.js"></script>
+  <script type="text/javascript" src="/static/js/jPlayer/demo.js"></script>
+  <script type="text/javascript" src="/static/js/custom/music4u_custom1.1.js"></script>
+    <!--[if lt IE 9]>
+    <script src="js/ie/html5shiv.js"></script>
+    <script src="js/ie/respond.min.js"></script>
+    <script src="js/ie/excanvas.js"></script>
+  <![endif]-->
+</head>
+<body class="">
+    <section class="vbox">
+        <header class="bg-black header header-md navbar navbar-fixed-top-xs">
+            <div class="navbar-header aside bg-success nav-xs">
+                <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+                    <i class="icon-list"></i>
+                </a>
+                <a href="/wall/{{sessionId}}" class="navbar-brand text-lt">
+                    <i class="icon-earphones"></i>
+                    <img src="/static/images/logo.png" alt="." class="hide">
+                    <span class="hidden-nav-xs m-l-sm">Musick4U</span>
+                </a>
+                <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+                    <i class="icon-settings"></i>
+                </a>
+            </div>
+            <ul class="nav navbar-nav hidden-xs">
+                <li>
+                    <a href="#nav,.navbar-header" data-toggle="class:nav-xs,nav-xs" class="text-muted">
+                        <i class="fa fa-indent text"></i>
+                        <i class="fa fa-dedent text-active"></i>
+                    </a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+                        </span>
+                        <input type="text" class="form-control input-sm no-border rounded" placeholder="Search songs, albums...">
+                    </div>
+                </div>
+            </form>
+            <div class="navbar-right ">
+                <ul class="nav navbar-nav m-n hidden-xs nav-user user">
+                    <li>
+                        <a href="/wall/{{sessionId}}/upload">
+                            <i class="fa fa-cloud-upload text"></i>
+                            <span class="text">Upload</span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle bg clear" data-toggle="dropdown">
+                            <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                                <img id="profile_pic_2" src="/static/images/a0.png" alt="...">
+                            </span>
+                            <label id="user_name">John.Smith </label><b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight">
+
+                            <li>
+                                <a href="/wall/{{sessionId}}/profile">Profile</a>
+                            </li>
+
+                            <li class="divider"></li>
+                            <li>
+                                <a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section>
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-black dk nav-xs aside hidden-print" id="nav">
+                    <section class="vbox">
+                        <section class="w-f-md scrollable">
+                            <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railopacity="0.2">
+                                <!-- nav -->
+                                <nav class="nav-primary hidden-xs">
+                                    <ul class="nav bg clearfix">
+                                        <!-- <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                                           Discover
+                                         </li>-->
+                                        <li>
+                                            <a href="/wall/{{sessionId}}">
+                                                <i class="icon-disc icon text-success"></i>
+                                                <span class="font-bold">What's new</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/wall/{{sessionId}}/upload">
+                                                <i class="fa fa-cloud-upload icon text-primary-lter"></i>
+                                                <span class="font-bold">Upload</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="icon-list icon  text-info-dker"></i>
+                                                <span class="font-bold">Listen</span>
+                                            </a>
+                                        </li>
+                                        <li class="m-b hidden-nav-xs"></li>
+                                    </ul>
+                                </nav>
+                                <!-- / nav -->
+                            </div>
+                        </section>
+
+                        <footer class="footer hidden-xs no-padder text-center-nav-xs">
+                            <div class="bg hidden-xs ">
+                                <div class="dropdown dropup wrapper-sm clearfix">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="thumb-sm avatar pull-left m-l-xs">
+                                            <img id="profile_pic_3" src="/static/images/a3.png" class="dker" alt="...">
+                                        </span>
+                                        <span class="hidden-nav-xs clear">
+                                            <span class="block m-l">
+                                                <strong class="font-bold text-lt"id="user_name_2">John.Smith</strong>
+                                                <b class="caret"></b>
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu animated fadeInRight aside text-left">
+                                        <li>
+                                            <span class="arrow bottom hidden-nav-xs"></span>
+                                            <a href="#">Settings</a>
+                                        </li>
+                                        <li>
+                                            <a href="profile.html">Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <span class="badge bg-danger pull-right">3</span>
+                                                Notifications
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="docs.html">Help</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </footer>
+                    </section>
+                </aside>
+                <!-- /.aside -->
+          <section id="content">
+          <section class="vbox">
+            <section class="scrollable">
+              <section class="hbox stretch">
+                <aside class="aside-lg bg-light lter b-r">
+                  <section class="vbox">
+                    <section class="scrollable">
+                      <div class="wrapper">
+                        <div class="text-center m-b m-t">
+                          <a href="#" class="thumb-lg">
+                            <img id="profile_pic_1" src="images/a0.png" class="img-circle">
+                          </a>
+                          <div>
+                            <div class="h3 m-t-xs m-b-xs" id="user_name_3">John.Smith</div>
+                            <!--<small id="loc" class="text-muted"><i class="fa fa-map-marker"></i> London, UK</small>-->
+                          </div>
+                        </div>
+                        <div class="panel wrapper">
+                          <div class="row text-center">
+                            <div class="col-xs-6">
+                              <a href="#">
+                                <span id="followers" class="m-b-xs h4 block">245</span>
+                                <small class="text-muted">Followers</small>
+                              </a>
+                            </div>
+                            <div class="col-xs-6">
+                              <a href="#">
+                                <span id="following" class="m-b-xs h4 block">55</span>
+                                <small class="text-muted">Following</small>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="btn-group btn-group-justified m-b">
+                          <!--<a class="btn btn-success btn-rounded" data-toggle="button">
+                            <span class="text">
+                              <i class="fa fa-eye"></i> Follow
+                            </span>
+                            <span class="text-active">
+                              <i class="fa fa-eye"></i> Following
+                            </span>
+                          </a>
+                          <a class="btn btn-dark btn-rounded">
+                            <i class="fa fa-comment-o"></i> Chat
+                          </a>-->
+                        </div>
+                      </div>
+                    </section>
+                  </section>
+                </aside>
+                <aside class="bg-default">
+                  <section class="vbox">
+                    <section class="scrollable">
+                      <h3><label class="control-label"></label></h3>
+                    </section>
+                    <div id="my_post" class="row">
+                    </div>
+                  </section>
+                </aside>
+                <aside class="bg-default">
+                  <section class="vbox">
+
+                    <section class="scrollable">
+
+                    </section>
+                  </section>
+                </aside>
+              </section>
+            </section>
+          </section>
+          <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+        </section>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+       //Music4u.user.buildWall();
+    });
+</script>

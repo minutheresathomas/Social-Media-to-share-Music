@@ -136,6 +136,26 @@ Music4u.user = function(window, document, undefined) {
 
 
 
+	}, updateProfile = function() {
+		var session_id = getCookie("sessionId");
+		var profile_id = $("#ProfileId").val();
+		console.log("profileid: "+profile_id);
+		  $('#updateProfileForm').ajaxSubmit({
+			  	type : "POST",
+					url : "/wall/"+session_id+"/profile/"+profile_id,
+          error: function(xhr) {
+                  status('Error: ' + xhr.status);
+          },
+
+          success: function(response) {
+                   //console.log(response);
+									//console.log("jibin");
+                   $('#uploadMsg').modal('toggle');
+          }
+	    });
+
+
+
 	}, getProfile = function() {
 		var session_id = getCookie("sessionId");
 
@@ -146,8 +166,21 @@ Music4u.user = function(window, document, undefined) {
 		data : session_id,
 		dataType : 'JSON',
 		success : function(data) {
-			//set cookie after login
+			//set cookie after login // <i class="fa fa-map-marker"></i> London, UK
 			console.log(data);
+			$("#user_name").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
+			$("#user_name_2").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
+			$("#user_name_3").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
+			$("#profile_pic_1").attr("src",data.userDetails.user_details[0].picture);
+			$("#profile_pic_2").attr("src",data.userDetails.user_details[0].picture);
+			$("#profile_pic_3").attr("src",data.userDetails.user_details[0].picture);
+			$("#followers").html(data.userDetails.num_followers[0].numberOfFollowers);
+			$("#following").html(data.userDetails.num_following[0].numberOfFollowing);
+			for(var i=0; i<data.userDetails.audio.length; i++){
+				var html = "<div class='col-lg-12'><div class='col-lg-10'><section class='panel panel-default'><div class='panel-body'> <div class='row'><div class='col-lg-2'><span class='thumb-sm avatar'><img src='"+data.userDetails.user_details[0].picture+"' alt='...'> </span></div><div class='col-lg-10'><label class='control-label'>"+data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname+"</label></div> </div> <div class='padder-v row'><div class='col-sm-11'> <span class='thumb-lg'><img src='"+data.userDetails.audio[i].albumArt+"' alt='...'></span><!--<a href='#'><img src='"+data.userDetails.audio[i].albumArt+"' alt='' style=''></a>--></div></div><div class='row'> <div class='col-lg-12'><label class='col-lg-10 control-label'><b>"+data.userDetails.audio[i].title+"</b></label><br> <small class='text-muted'>"+data.userDetails.audio[i].artist+"</small><audio controls> <source src='"+data.userDetails.audio[i].audioFile+"' type='audio/mpeg'> Your browser does not support the audio element.</audio></div></div><div class='row' style='display:none;'><div class='col-sm-12'><a href='#'  class='active "+data.userDetails.audio[i].audio_id+"_like'  like-count='"+data.userDetails.audio[i].like_count+"' onclick='unlike("+data.userDetails.audio[i].audio_id+");' style='display:"+data.userDetails.audio[i].audiolike+"'>"+data.userDetails.audio[i].like_count+"<i class='fa fa-heart-o text'></i> <i class='fa fa-heart text-active text-danger'></i></a><a href='#'  class=' "+data.userDetails.audio[i].audio_id+"_unlike'  like-count='"+data.userDetails.audio[i].like_count+"' onclick='like("+data.userDetails.audio[i].audio_id+"); ' style='display:"+data.userDetails.audio[i].unlike+"'>"+data.userDetails.audio[i].like_count+" <i class='fa fa-heart-o text'></i><i class='fa fa-heart text-active text-danger'></i></a></div></div>  </div></section></div> <div class='clearfix visible-xs'></div></div>";
+
+								$("#my_post").append(html);
+			}
 
 		},
 		cache : false,
@@ -235,6 +268,7 @@ Music4u.user = function(window, document, undefined) {
 		login : login,
 		getProfile:getProfile,
 		likeAudio : likeAudio,
+		updateProfile:updateProfile,
 		buildWall:buildWall,
 		socket: socket,
 		logout : logout
@@ -287,6 +321,10 @@ function signup_user() {
 	Music4u.user.register();
 }
 
+function update_profile() {
+	Music4u.user.updateProfile();
+}
+
 function upload_file(){
 	Music4u.user.audioUpload();
 	// $('#uploadForm').submit(function() {
@@ -317,8 +355,8 @@ function unlike(aid){
 }
 
 $(document).ready(function () {
-	var socket = io.connect('http://localhost:3000');
-	Music4u.user.socket = socket;
-	Music4u.user.getProfile();
+	//var socket = io.connect('http://localhost:3000');
+	//Music4u.user.socket = socket;
+	//Music4u.user.getProfile();
 
 });

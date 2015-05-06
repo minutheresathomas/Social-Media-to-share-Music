@@ -64,7 +64,7 @@
                                 <button type="button" class="btn btn-lg btn-warning lt b-white b-2x btn-block btn-rounded" onClick="signup_user();" ><i class="icon-arrow-right pull-right"></i><span class="m-r-n-lg">Sign up</span></button>
                                 <div class="line line-dashed"></div>
                                 <p class="text-muted text-center"><small>Already have an account?</small></p>
-                                <a href="/signin" data-dismiss="modal" class="btn btn-lg btn-success btn-block btn-rounded">Click Sign in to</a>
+                                <a href="/signin" class="btn btn-lg btn-success btn-block btn-rounded">Click Sign in to</a>
             </section>
         </div>
     </section>
@@ -79,6 +79,6 @@
         </div>
     </footer>
     <!-- / footer -->
-    
+
 </body>
 </html>
