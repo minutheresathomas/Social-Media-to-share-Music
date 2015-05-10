@@ -17,6 +17,15 @@
     <script src="js/ie/respond.min.js"></script>
     <script src="js/ie/excanvas.js"></script>
   <![endif]-->
+  <script>
+  function search(){
+	var text = $("#search_user").val();
+    	var data = {
+    		"keyword":text
+    	};
+    	location.href = "/search?keyword="+text;	
+}
+  </script>
 </head>
 <body class="">
   <section class="vbox">
@@ -31,16 +40,16 @@
                   <i class="icon-list"></i>
               </a>
           </div>
-          <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
-              <div class="form-group">
-                  <div class="input-group">
-                      <span class="input-group-btn">
-                          <button type="submit" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
-                      </span>
-                      <input type="text" class="form-control input-sm no-border rounded" placeholder="Search songs, albums...">
-                  </div>
-              </div>
-          </form>
+          <div class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-sm bg-white btn-icon rounded" id="search" onclick="search()"><i class="fa fa-search"></i></button>
+                        </span>
+                        <input type="text" id="search_user" class="form-control input-sm no-border rounded" placeholder="Search songs, albums...">
+                    </div>
+                </div>
+            </div>
           <div class="navbar-right">
               <ul class="nav navbar-nav hidden-xs nav-user user">
                   <li>
@@ -73,7 +82,7 @@
                     <span class="bar4 a4 bg-warning dk"></span>
                     <span class="bar5 a5 bg-danger dker"></span>
                   </span></h2>
-                 <iframe src="http://52.8.81.235:5601/#/visualize/edit/Genre-Classification?embed&_g=(refreshInterval:(display:Off,section:0,value:0),time:(from:now%2Fy,mode:quick,to:now%2Fy))&_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),vis:(aggs:!((id:'1',params:(),schema:metric,type:count),(id:'2',params:(field:genre,order:desc,orderBy:'1',size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTooltip:!t,isDonut:!f,shareYAxis:!t),type:pie))" height="400" width="600"></iframe>
+                  <iframe src="http://52.8.81.235:5601/#/dashboard/Musik4u-Analytics?embed&_a=(filters:!(),panels:!((col:1,id:Genre-Classification,row:1,size_x:3,size_y:2,type:visualization),(col:4,id:DAILY-UNIQUE-USERS,row:1,size_x:3,size_y:2,type:visualization),(col:7,id:Total-Uploads-Metric,row:1,size_x:3,size_y:2,type:visualization),(col:10,id:Daily-Audio-Uploads,row:1,size_x:3,size_y:2,type:visualization),(col:1,id:Daily-Average-Of-Likes,row:3,size_x:3,size_y:2,type:visualization),(col:4,id:Average-of-Likes-for-Top-Artists,row:3,size_x:3,size_y:2,type:visualization),(col:7,id:Daily-Uploads-for-Top-Artists,row:3,size_x:3,size_y:2,type:visualization),(col:10,id:Total-Likes-Per-Artist,row:3,size_x:3,size_y:2,type:visualization),(col:1,id:Top-Genres,row:5,size_x:3,size_y:2,type:visualization),(col:4,id:Genres-for-Top-Artists,row:5,size_x:3,size_y:2,type:visualization),(col:7,id:Least-Popular-Audios,row:5,size_x:3,size_y:2,type:visualization),(col:10,id:Audio-Uploads-Per-Artist,row:5,size_x:3,size_y:2,type:visualization),(col:1,id:Most-Popular-Audios,row:7,size_x:3,size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:'*')),title:'Musik4u%20Analytics')&_g=(refreshInterval:(display:'5%20seconds',section:1,value:5000),time:(from:now%2Fy,mode:quick,to:now%2Fy))" height="1000" width="1300"></iframe>
                 </section>
                 
               </section>

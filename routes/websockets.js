@@ -3,25 +3,26 @@
  */
 
 var mysql =  require('mysql');
+var elasticsearch = require('elasticsearch');
 var redis = require('redis');
-//var client = redis.createClient(6379, "music4u.q4vpog.ng.0001.usw1.cache.amazonaws.com");
 var client = redis.createClient(6379, "localhost");
-//var connection =  mysql.createConnection({
-//	host : "localhost",
-//	user :"root",
-//	password:"",
-//	database:"musik4u-test"
-//
-//});
-var pool = mysql.createPool({
-	host     : 'cmpe280.cpqctarrvuuh.us-west-1.rds.amazonaws.com',
+var connection =  mysql.createConnection({
+	host     : 'localhost',
 	user     : 'root',
 	password : 'sample123',
 	port: '3306',
 	database: 'musik4u'
 });
 
+/*var elasticClient = new elasticsearch.Client({
+	host: 'localhost:9200',
+	log: 'trace'
+});*/
+
+
 exports.input = function(socket) {
+	
+	
 
 	socket.on('userId',function(msg){
 		client.set(msg.userId, socket.id, function(err) {
@@ -34,17 +35,21 @@ exports.input = function(socket) {
 		})
 	});
 
-socket.on('clearUserId',function(msg){
-	client.del(msg.userId,function(err){
-		if(err) throw err;
-		console.log("redis key deleted: " + msg.userId);
+	socket.on('clearUserId',function(msg){
+		client.del(msg.userId,function(err){
+			if(err) throw err;
+			console.log("redis key deleted: " + msg.userId);
+		});
 	});
-});
 
 
 	console.log('user connected' +socket.id);
 	socket.on('comments', function(msg){
 		console.log('message: ' + msg.comment +":"+msg.sessionId+msg.audioId);
+		// var userId=getUserId(msg.sessionId);
+
+
+
 		var userId=2;
 		/*client.set(userId, socket.id, function(err) {
 			if (err) throw err;
@@ -62,29 +67,40 @@ socket.on('clearUserId',function(msg){
 		socket.emit('comments', msg.comment);
 	});
 
-	socket.on('likes', function(msg){
+	socket.on('send:like', function(msg){
 		console.log('message likes:'+msg.sessionId+msg.audioId);
+		// var userId=getUserId(msg.sessionId);
+
+
+		/*client.set(userId, socket.id, function(err) {
+			if (err) throw err;
+			console.log("User socket is now" + socket.id);
+		});*/
 		var audioId=msg.audioId;
 		var userId=msg.sessionId;
-		var likeStatus=msg.likeStatus;
 
-		var sql="insert into likes_table(user_id,audio_id,like_value) values (?,?,?)";
+		var sql="insert into likes_table(user_id,audio_id) values (?,?)";
 
-		connection.query(sql, [userId,audioId,likeStatus], function (err,rows,fields){
+		connection.query(sql, [userId,audioId], function (err,rows,fields){
 			if(err) throw err;
 			else{
-				var likeSql="select count(*) as numberOfLikes from likes_table where user_id=? and audio_id=? and like_value=1";
-				connection.query(likeSql, [userId,audioId,likeStatus], function (err,numberOfLikes){
+				var likeSql="select count(*) as numberOfLikes from likes_table where user_id=? and audio_id=?";
+				connection.query(likeSql, [userId,audioId], function (err,results){
 					if(err) throw err;
 					else{
-						var numOfLikes = numberOfLikes;
+						console.log("results[0].numberOfLikes "+results[0].numberOfLikes);
+					 	var numOfLikes = results[0].numberOfLikes;
+						var data = {
+								'numOfLikes':numOfLikes,
+								'userId' : userId
+						}
 						elasticClient.update({
-							index: 'music4u',
-							type: 'musictype',
-							id: audioId,
-							body: {
-								script: 'ctx._source.numOfLikes += 1',
-							}
+						index: 'music4u',
+						type: 'musictype',
+						id: audioId,
+						body: {
+							script: 'ctx._source.numOfLikes += 1',
+						}
 						}, function (err, results){
 							if(err)
 								throw err;
@@ -92,10 +108,13 @@ socket.on('clearUserId',function(msg){
 							{
 								console.log("After re-insert: "+results);
 								console.log("Number of likes ##### : "+numOfLikes);
-								socket.emit('likes', numOfLikes);
+//								socket.emit('self:like', data);
+//								socket.broadcast.emit('likes', data);
 							}
 						});
-//						socket.emit('likes', numOfLikes);
+						socket.emit('self:like', data);
+						socket.broadcast.emit('likes', data);
+//						socket.emit('likes', data);
 					}
 				});
 			};
@@ -104,37 +123,40 @@ socket.on('clearUserId',function(msg){
 
 	});
 
-	socket.on('unlikes', function(msg){
+	socket.on('send:unlike', function(msg){
 		console.log('message unlikes:'+msg.sessionId+msg.audioId);
 		// var userId=getUserId(msg.sessionId);
 
-		var userId=2;
 		/*client.set(userId, socket.id, function(err) {
 			if (err) throw err;
 			console.log("User socket is now" + socket.id);
 		});*/
 		var audioId=msg.audioId;
 		var userId=msg.sessionId;
-		var likeStatus=msg.likeStatus;
 
 		var sql="delete from likes_table where audio_id=? and user_id=?";
 
 		connection.query(sql, [audioId,userId], function (err,rows,fields){
-			console.log("jibin");
+			//console.log("jibin");
 			if(err) throw err;
 			else{
-				var likeSql="select count(*) as numberOfLikes from likes_table where user_id=? and audio_id=? and like_value=1";
-				connection.query(likeSql, [userId,audioId,likeStatus], function (err,numberOfLikes){
+				var likeSql="select count(*) as numberOfLikes from likes_table where user_id=? and audio_id=?";
+				connection.query(likeSql, [userId,audioId], function (err,results){
 					if(err) throw err;
 					else{
-						var numOfLikes = numberOfLikes;
+						console.log("results[0].numberOfLikes "+results[0].numberOfLikes);
+					 	var numOfLikes = results[0].numberOfLikes;
+						var data = {
+								'numOfLikes':numOfLikes,
+								'userId' : userId
+						}
 						elasticClient.update({
-							index: 'music4u',
-							type: 'musictype',
-							id: audioId,
-							body: {
-								script: 'ctx._source.numOfLikes -= 1',
-							}
+						index: 'music4u',
+						type: 'musictype',
+						id: audioId,
+						body: {
+							script: 'ctx._source.numOfLikes -= 1',
+						}
 						}, function (err, results){
 							if(err)
 								throw err;
@@ -142,10 +164,13 @@ socket.on('clearUserId',function(msg){
 							{
 								console.log("After re-insert: "+results);
 								console.log("Number of likes ##### : "+numOfLikes);
-								socket.emit('likes', numOfLikes);
+//								socket.emit('self:unlike', data);
+//								socket.broadcast.emit('unlikes', data);
 							}
 						});
-						socket.emit('likes', numOfLikes);
+						socket.emit('self:unlike', data);
+						socket.broadcast.emit('unlikes', data);
+//						socket.emit('unlikes', data)
 					}
 				});
 			};

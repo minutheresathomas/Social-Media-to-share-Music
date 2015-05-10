@@ -78,7 +78,7 @@
             <section class="scrollable wrapper">
             	<h4>Nourish your ears with the music you love.</h4>
                 <img src="images/banner1.jpg" class="img-rounded img-responsive" />
-                <p>Live the life in music.Explore more!</p>
+                <p>{{tag_line}}!</p>
             </section>
           </section>
           <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>

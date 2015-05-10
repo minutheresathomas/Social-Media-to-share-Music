@@ -103,6 +103,60 @@ Music4u.user = function(window, document, undefined) {
 				console.log("Ajax request has failed. logout failed");
 			}
 		});
+	}, getComment = function() {
+		//var lang = $("#lang").val();
+		var session_id = getCookie("sessionId");
+		var audio_id = $("#audio_id").val();
+		var data = {
+			"session_id" : session_id
+		}
+		$.ajax({
+			type : "GET",
+			url : "/wall/"+session_id+"/audio/"+audio_id+"/comments",
+			data : data,
+			dataType : 'JSON',
+			success : function(data) {
+				//set cookie after login
+				//console.log(data);
+				for(var i=0; i<data.length; i++){
+					var comment = "<div class='col-lg-12'><section class='panel panel-default'><div class='panel-body'> <div class='col-lg-1'><a><img class='thumb-sm avatar ' src='"+data[i].picture+"' alt='' style=''></a></div><div class='col-lg-11'><a href='/wall/"+session_id+"/profile/"+data[i].user_id+"' class='control-label'>"+data[i].firstname+" "+data[i].lastname+" </a> </div><div class='col-lg-12'><label class='font-bold col-lg-10 control-label'>"+data[i].comment+"</label></div></div></section></div>";
+					$("#comment").append(comment);
+				}
+
+			},
+			cache : false,
+			error : function(error) {
+				console.log("Ajax request has failed. Set language failed");
+			}
+		});
+	},sendComment = function() {
+		//var lang = $("#lang").val();
+		var session_id = getCookie("sessionId");
+		var audio_id = $("#audio_id").val();
+		var comment = $("#comment_text").val();
+		var data = {
+			"comment" : comment
+		}
+		$.ajax({
+			type : "POST",
+			url : "/wall/"+session_id+"/audio/"+audio_id+"/comments",
+			data : data,
+			dataType : 'JSON',
+			success : function(data) {
+				//set cookie after login
+				//console.log(data);
+				for(var i=0; i<data.length; i++){
+					var html = "<div class='col-lg-12'><section class='panel panel-default'><div class='panel-body'> <div class='col-lg-1'><a><img class='thumb-sm avatar ' src='"+data[i].picture+"' alt='' style=''></a></div><div class='col-lg-11'><a href='/wall/"+session_id+"/profile/"+data[i].user_id+"' class='control-label'>"+data[i].firstname+" "+data[i].lastname+" </a> </div><div class='col-lg-12'><label class='font-bold col-lg-10 control-label'>"+data[i].comment+"</label></div></div></section></div>";
+					$("#comment").append(html);
+				}
+				$("#comment_text").val('');
+
+			},
+			cache : false,
+			error : function(error) {
+				console.log("Ajax request has failed. Set language failed");
+			}
+		});
 	}, audioUpload = function() {
 		var session_id = getCookie("sessionId");
 		var title = $("#title").val();
@@ -167,7 +221,7 @@ Music4u.user = function(window, document, undefined) {
 		dataType : 'JSON',
 		success : function(data) {
 			//set cookie after login // <i class="fa fa-map-marker"></i> London, UK
-			console.log(data);
+			//console.log(data);
 			$("#user_name").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
 			$("#user_name_2").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
 			$("#user_name_3").html(data.userDetails.user_details[0].firstname+" "+data.userDetails.user_details[0].lastname);
@@ -198,8 +252,10 @@ Music4u.user = function(window, document, undefined) {
 									"audioId":19,
 									"likeStatus":status};
 		if(status == 1){
+			//Music4u.user.socket.emit('send:likes', jsonObject);
 			Music4u.user.socket.emit('likes', jsonObject);
 		}else{
+			//Music4u.user.socket.emit('send:unlikes', jsonObject);
 			Music4u.user.socket.emit('unlikes', jsonObject);
 		}
 
@@ -233,6 +289,9 @@ Music4u.user = function(window, document, undefined) {
 		var password = $("#confirm_password").val();
 		//alert(name);
 		//alert(email);
+		
+		//var lang = getCookie("lang");
+		
 		var data = {
 			"firstname" : firstname,
 			"lastname" : lastname,
@@ -271,6 +330,8 @@ Music4u.user = function(window, document, undefined) {
 		updateProfile:updateProfile,
 		buildWall:buildWall,
 		socket: socket,
+		sendComment:sendComment,
+		getComment:getComment,
 		logout : logout
 	};
 }(this, document);
